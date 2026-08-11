@@ -1,19 +1,19 @@
 # syntax=docker/dockerfile:1
-FROM node:22-alpine AS base
+FROM oven/bun:1.2-alpine AS base
 WORKDIR /app
 
 FROM base AS dependencies
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json ./
+RUN bun install
 
 FROM base AS builder
 ARG NEXT_PUBLIC_BASE_PATH=/todo-maintenanace
 ENV NEXT_PUBLIC_BASE_PATH=$NEXT_PUBLIC_BASE_PATH
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN bun run build
 
-FROM node:22-alpine AS runner
+FROM oven/bun:1.2-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=7444
@@ -27,4 +27,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 USER nextjs
 EXPOSE 7444
-CMD ["node", "server.js"]
+CMD ["bun", "server.js"]
