@@ -46,6 +46,7 @@ export default function TodoApp() {
   const [menuFor, setMenuFor] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [ready, setReady] = useState(false);
+  const apiBase = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const today = new Date().toISOString().slice(0, 10);
   const todayLabel = new Intl.DateTimeFormat("en", {
     weekday: "long",
@@ -56,20 +57,20 @@ export default function TodoApp() {
     .toUpperCase();
 
   useEffect(() => {
-    fetch("/api/todos")
+    fetch(`${apiBase}/api/todos`)
       .then((r) => r.json())
       .then((data) => {
         setTodos(data);
         setReady(true);
       })
       .catch(() => setReady(true));
-    fetch("/api/participants")
+    fetch(`${apiBase}/api/participants`)
       .then((r) => r.json())
       .then(setParticipants)
       .catch(() => setParticipants([]));
-  }, []);
+  }, [apiBase]);
   const update = async (payload: Partial<Todo> & { id: string }) => {
-    const response = await fetch("/api/todos", {
+    const response = await fetch(`${apiBase}/api/todos`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -82,7 +83,7 @@ export default function TodoApp() {
     }
   };
   const remove = async (id: string) => {
-    await fetch("/api/todos", {
+    await fetch(`${apiBase}/api/todos`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -92,7 +93,7 @@ export default function TodoApp() {
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!title.trim()) return;
-    const response = await fetch("/api/todos", {
+    const response = await fetch(`${apiBase}/api/todos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
