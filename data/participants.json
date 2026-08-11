@@ -1,0 +1,17 @@
+[
+  {
+    "id": "tae",
+    "name": "Kittichet Tae",
+    "initials": "KT",
+    "color": "#d8a48d"
+  },
+  { "id": "au", "name": "Autthapon Au", "initials": "AA", "color": "#a1b4db" },
+  { "id": "ben", "name": "Supanart Ben", "initials": "SB", "color": "#83b9a4" },
+  {
+    "id": "phop",
+    "name": "Kumperaphop Phop",
+    "initials": "KP",
+    "color": "#d8a5c5"
+  },
+  { "id": "m", "name": "Woraphop M", "initials": "WM", "color": "#a8a5c5" }
+]
